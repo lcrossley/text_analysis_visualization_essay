@@ -1,0 +1,11 @@
+---
+title: "README"
+author: "Laura Crossley"
+date: "4/23/2017"
+output: html_document
+---
+
+This is my third visualization essay for Clio 2.
+
+- [R Markdown](vis-essay-3.Rmd)
+- [HTML](vis-essay-3.html)

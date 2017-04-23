@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+title: "Text Analysis Visualization Essay"
 author: "Laura Crossley"
 date: "4/19/2017"
 output: html_document
@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-```{r}
+```{r message=FALSE, quiet=TRUE, echo=FALSE, results = "hide"}
 #devtools::install_github("bmschmidt/wordVectors")
 library(devtools)
 library(wordVectors)
@@ -19,29 +19,27 @@ library(dplyr)
 library(knitr)
 ```
 
-```{r}
+```{r message=FALSE, quiet=TRUE, echo=FALSE, results = "hide"}
 if (!file.exists("IRAto1904.txt")) prep_word2vec(origin="1-22",destination="IRAto1904.txt",lowercase=T,bundle_ngrams=2)
 
 if (!file.exists("IRAto1927.txt")) prep_word2vec(origin="23-45",destination="IRAto1927.txt",lowercase=T,bundle_ngrams=2)
 ```
 
-```{r}
+```{r message=FALSE, quiet=TRUE, echo=FALSE, results = "hide"}
 if (!file.exists("IRAto1904.bin")) {modela = train_word2vec("IRAto1904.txt","IRAto1904.bin",vectors=200,threads=4,window=12,iter=5,negative_samples=0)} else modela = read.vectors("IRAto1904.bin")
 
 if (!file.exists("IRAto1927.bin")) {modelb = train_word2vec("IRAto1927.txt","IRAto1927.bin",vectors=200,threads=4,window=12,iter=5,negative_samples=0)} else modelb = read.vectors("IRAto1927.bin")
 ```
 
-The Indian Rights Association (IRA) was an activist group founded by non-Indians in 1882. They believed that the Bureau of Indian Affairs was holding Indians back from this possible future by providing too much paternalistic support and advocated for its abolition. They also believed that Christianity, education, and farming on individually allotted lands would "civilize" Indians, with their main goal being the extension of citizenship to Indians so that Indians would cease "exist[ing] as a man, apart from other men."^[https://books.google.com/books?id=SaM_AQAAMAAJ&printsec=frontcover#v=onepage&q&f=false Third Annual Report of the Indian Rights Association, pg. 5] Prior to the Indian Citizenship Act of 1924, which granted U.S. citizenship to all Indians, Indians could still become citizens by marrying whites, serving in the military, or accepting allotments, but the IRA sought something more comprehensive.
 
-Although the IRA is known for advocating for Indian citizenship, attention has not been paid to how much their understanding of citizenship or what it would mean for Indians changed over time. The rights and responsibilities that people associate with citizenship are not stable, nor is the understanding of how much citizenship is a matter of local versus national belonging.
+The Indian Rights Association (IRA) was an activist group founded by non-Indians in 1882. They believed that Christianity, education, and farming on individually allotted lands would "civilize" Indians, with their main goal being the extension of citizenship to Indians so that Indians would cease "exist[ing] as a man, apart from other men."^[https://books.google.com/books?id=SaM_AQAAMAAJ&printsec=frontcover#v=onepage&q&f=false Third Annual Report of the Indian Rights Association, pg. 5] Prior to the Indian Citizenship Act of 1924, which granted U.S. citizenship to all Indians, Indians could still become citizens by marrying whites, serving in the military, or accepting allotments, but the IRA sought something more comprehensive.
 
-To examine how the IRA thought about citizenship, I am using the wordVectors package on the organization's annual reports for every year from 1883 to 1927. I created two models by splitting the reports into two sections: 1883-1904 and 1905-1927. 1905 marked the end of organization founder Herbert Welsh's leadership, and this also happens to split the available reports almost equally in half.
+Although the IRA is known for advocating for Indian citizenship, attention has not been paid to how much their understanding of citizenship or what it would mean for Indians changed over time. To examine this, I am using the wordVectors package on the organization's annual reports for every year from 1883 to 1927. I created two models by splitting the reports into two sections: 1883-1904 and 1905-1927. 1905 marked the end of organization founder Herbert Welsh's leadership, and this also happens to split the available reports almost equally in half. Using the closest_to function on the words citizenship, citizen, and citizens on the top 5000 words in each of the two models gives the below lists of 30 words related to citizenship.
 
-Using the closest_to function on the words citizenship, citizen, and citizens on the top 5000 words in each of the two models gives the below lists of 30 words related to citizenship.
+The words that I typically associate with citizenship are words like "responsibilities," "privileges," "rights," "freedom," and "duties." What stands out right away is that only "rights" is included in the list for 1883-1904 while all of these words are in the list for 1905-1927 (additionally, rights has a higher score there than in the first list). This information, paired with the fact that "ownership" has a very high score in the first list but does not appear in the second list, indicates a changing notion of Indian citizenship. It seems that the IRA moved away their initial argument that citizenship needed to be paired with individual ownership of allotted land and replaced this with a definition of Indian citizenship rooted primarily in fulfilling responsibilities. That "responsibilities" has a higher score than "rights" or "privileges" shows that they were thinking more about what Indians needed to do as citizens rather than the benefits that Indians would derive from being citizens. These rhetorical changes were not necessarily isolated to questions surrounding Indian citizenship; the new intense association between "citizenship" and "responsibilities" may have been tied to the impact of World War I.^[See *Uncle Sam Wants You: World War I and the Making of the Modern American Citizen* by Christopher Capozzola] More research is necessary to understand if the changes in how the IRA talked about citizenship had more to do with these broad, national changes or with something more specific like growing disillusion with allotment, but the stark contrast between the two lists demonstrates that citizenship took on new meaning for the IRA in the twentieth century.
 
-The words that I typically associate with citizenship are words like "responsibilities," "privileges," "rights," "freedom," and "duties." What stands out right away is that only "rights" is included in the list for 1883-1904 while all of these words are in the list for 1905-1927 (additionally, rights has a higher score there than in the first list). This information, paired with the fact that "ownership" has a very high score in the first list but does not appear in the second list, indicates a changing notion of Indian citizenship. It seems that the IRA moved away their initial argument that citizenship needed to be paired with individual ownership of allotted land and replaced this with a definition of Indian citizenship rooted primarily in fulfilling responsibilities. That responsibilities has a higher score than rights or privileges shows that they were thinking more about what Indians needed to do as citizens rather than the benefits that Indians would derive from being citizens. These rhetorical changes were not necessarily isolated to questions surrounding Indian citizenship; the new intense association between "citizenship" and "responsibilities" may have been tied to the impact of World War I.^[See *Uncle Sam Wants You: World War I and the Making of the Modern American Citizen* by Christopher Capozzola] More research is necessary to understand if the changes in how the IRA talked about citizenship had more to do with these broad, national changes or with something more specific like growing disillusion with allotment, but the stark contrast between the two lists demonstrates that citizenship took on new meaning for the IRA in the twentieth century.
 
-```{r}
+```{r message=FALSE, quiet=TRUE, echo=FALSE}
 model3 = modela[1:5000,]
 
 model3 %>% closest_to(c("citizenship", "citizen", "citizens"), 30)
@@ -51,16 +49,15 @@ model4 = modelb[1:5000,]
 model4 %>% closest_to(c("citizenship", "citizen", "citizens"), 30)
 ```
 
+
 To get a closer look at how each of the two sets of IRA reports talked about "rights" and "responsibilities," two words closely associated with citizenship in the second model, I took the twenty words most similar to either of them and plotted them on a plane of association with "responsibility" and association with "rights." The lists are there to help make sense of the crowded areas of the plots.
 
 From the first to the second plot, the word "citizenship" has switched from being more closely associated with "rights" to being associated with "responsibilities." This supports the argument above that the IRA became increasingly interested in discussing what Indians needed to do as citizens or do to become citizens.
 
-It is also notable that the word "treaty," which is much more highly associated with "rights" than "responsibilities" in the first plot, is not present in the second plot. The IRA's interest in discussing treaty rights seems to have dwindled as they increasingly turned to discussing the rights of "land_titles"/"titles," "due_process," and "property"/"prop_erty," which are the rights of individual citizens, not Native nations. This change in their rhetoric surrounding rights is interesting because the IRA continued to profess interest in treaty rights after 1904, for example, including in their 1916 charter of incorporation that one of the IRA's purposes is "to secure to the Indians of the United States the political and civil rights already guaranteed to them by treaty and statute of the United States, and such as their civilization and circumstances may justify."^[https://books.google.com/books?id=FYk_AQAAMAAJ&printsec=frontcover#v=onepage&q&f=false, pg. 94.] 
+It is also notable that the word "treaty," which is much more highly associated with "rights" than "responsibilities" in the first plot, is not present in the second plot. The IRA's interest in discussing treaty rights seems to have dwindled as they increasingly turned to discussing the rights of "land_titles"/"titles," "due_process," and "property"/"prop_erty," which are the rights of individual citizens, not Native nations. This change in their rhetoric surrounding rights is interesting because the IRA continued to profess interest in treaty rights after 1904, for example, including in their 1916 charter of incorporation that one of the IRA's purposes is "to secure to the Indians of the United States the political and civil rights already guaranteed to them by treaty and statute of the United States, and such as their civilization and circumstances may justify."^[https://books.google.com/books?id=FYk_AQAAMAAJ&printsec=frontcover#v=onepage&q&f=false Thirty-Fifth Annual Report of the Indian Rights Association, pg. 94.] It is possible that the model is misleading, but it is also possible that the IRA was not actually as interested in treaty rights as they claimed.
 
 
-
-
-```{r fig.width=10, fig.height=7}
+```{r  message=FALSE, quiet=TRUE, echo=FALSE, fig.width=10, fig.height=7.5}
 randr = modela[[c("rights", "responsibilities"), average=F]]
 
 #take 5000 most common words
@@ -80,7 +77,7 @@ abline(a=0,b=1)
 rights_and_responsibilities
 ```
 
-```{r fig.width=10, fig.height=10}
+```{r  message=FALSE, quiet=TRUE, echo=FALSE, fig.width=10, fig.height=10}
 randr = modelb[[c("rights", "responsibilities"), average=F]]
 
 #take 5000 most common words
